@@ -4,10 +4,10 @@ A pure-stdlib Python program (no network, no installed packages) that
 draws a 1024x1024 newspaper front page and writes /output/entry.png.
 
 Layout: masthead, the FAA ground stop as the dominant lead, a WORLD
-MAP with all 30 stories pinned on it, and a three-column numbered
+MAP with all 33 stories pinned on it, and a three-column numbered
 index of the day's stories across six regions.
 
-The 30 stories, all reported on Friday 13 November 2026:
+The 33 stories, all reported on Friday 13 November 2026:
   North America
    1 FAA nationwide ground stop: telecom failure halted all US
      departures 4+ hours; 1,000+ flights cancelled, ~10,000 delayed.
@@ -25,6 +25,8 @@ The 30 stories, all reported on Friday 13 November 2026:
    9 Federal report detailed failures in the Knowles fire that
      killed four firefighters.
   10 North American measles status awaited a formal PAHO ruling.
+  31 Sen. Chris Van Hollen challenged Chuck Schumer for Senate
+     majority leader, in a closed-ballot vote set for Dec 1.
   Europe
   11 Ukraine peace talks advanced: US envoys Kushner and Witkoff
      met Zelensky in Dublin; Europe agreed to join the next round.
@@ -45,6 +47,8 @@ The 30 stories, all reported on Friday 13 November 2026:
   18 Qatar and Turkey signed a mutual defence pact in Istanbul.
   19 China ran a large unannounced Pacific exercise around
      Taiwan, detailed by Taipei officials on Friday.
+  32 Jet fuel hit about $148 a barrel, squeezing Asia-Pacific
+     airlines as older hedging contracts expired.
   20 Houthis attacked Saudi Arabia's East-West oil pipeline.
   21 US military said it downed two Iranian drones headed for
      Bahrain; Iran claimed a radar strike there.
@@ -58,6 +62,8 @@ The 30 stories, all reported on Friday 13 November 2026:
   28 Ethiopian forces took Mekelle as the Tigray conflict resumed.
   29 More than 7,400 migrants reached Spain's Canary Islands in
      the first 10 days of November.
+  33 Ebola cases passed 11,000, the second-worst outbreak on
+     record, with insecurity the biggest challenge to response.
   30 Pope Leo met abuse survivors in Peru before record crowds.
 
 Text is rendered with an embedded 5x7 bitmap font, so every label
@@ -299,21 +305,24 @@ STORIES = [
     (13, "EU", "UKRAINE'S 1,200 DRONES", 30, 50),
     (14, "EU", "MOSCOW CAR BOMB", 37, 56),
     (15, "EU", "IAEA WARNS ON IRAN PLANT", 16, 48),
-    (16, "EU", "COP31: UN URGES CUTS", 33, 36),
+    (16, "EU", "COP31: UN URGES CUTS", 33, 39),
     (17, "EU", "KILLER-ROBOT TREATY", 9, 44),
-    (18, "ME", "QATAR-TURKEY PACT", 27, 42),
+    (18, "ME", "QATAR-TURKEY PACT", 27, 40),
     (19, "AS", "CHINA DRILLS NEAR TAIWAN", 122, 24),
-    (20, "ME", "HOUTHI HIT SAUDI LINE", 38, 24),
-    (21, "ME", "IRAN DRONES DOWNED", 52, 27),
-    (22, "ME", "TANKERS HIT IN HORMUZ", 58, 27),
+    (20, "ME", "HOUTHI HIT SAUDI LINE", 34, 22),
+    (21, "ME", "IRAN DRONES DOWNED", 54, 29),
+    (22, "ME", "TANKERS HIT IN HORMUZ", 61, 29),
     (23, "ME", "GCC: END HOUTHI ATTACKS", 45, 24),
-    (24, "ME", "ISRAEL HITS S. LEBANON", 36, 34),
-    (25, "ME", "3 KILLED IN GAZA FIRE", 32, 29),
+    (24, "ME", "ISRAEL HITS S. LEBANON", 38, 32),
+    (25, "ME", "3 KILLED IN GAZA FIRE", 29, 28),
     (26, "EU", "IEA: Q4 OIL SURPLUS", -1, 48),
     (27, "AF", "ABYEI MANDATE EXTENDED", 28, 9),
     (28, "AF", "MEKELLE FALLS", 39, 13),
     (29, "AF", "CANARY ROUTE: 7,400", -16, 28),
     (30, "SA", "POPE LEO MEETS SURVIVORS", -77, -12),
+    (31, "NA", "VAN HOLLEN VS SCHUMER", -58, 48),
+    (32, "AS", "JET FUEL $148 HITS ASIA", 104, 1),
+    (33, "AF", "EBOLA CASES PASS 11,000", 23, -3),
 ]
 
 # Rough continent outlines in (lon, lat); stylised, equirectangular.
@@ -427,8 +436,8 @@ def draw_page():
     cv.rect(8, 8, W - 16, H - 16, INK, 4)
 
     # Masthead.
-    cv.text_center(W // 2, 26, "THE WORLD IN ONE PICTURE", 5, INK)
-    cv.text_center(W // 2, 72, "FRIDAY, 13 NOVEMBER 2026 - 30 STORIES, 6 REGIONS", 3, RED)
+    cv.text_center(W // 2, 22, "THE WORLD IN ONE PICTURE", 6, INK)
+    cv.text_center(W // 2, 70, "FRIDAY, 13 NOVEMBER 2026 - 33 STORIES, 6 REGIONS", 3, RED)
     cv.fill_rect(24, 104, W - 48, 3, INK)
     cv.fill_rect(24, 110, W - 48, 2, RED)
 
@@ -458,7 +467,7 @@ def draw_page():
     cv.fill_rect(mx, my, mw, mh, WHITE)
     cv.rect(mx, my, mw, mh, INK, 3)
     cv.fill_rect(mx + 3, my + 3, mw - 6, 28, RED)
-    cv.text_center(W // 2, my + 10, "PINNED ON THE MAP: 30 STORIES, 6 REGIONS", 2, WHITE)
+    cv.text_center(W // 2, my + 10, "PINNED ON THE MAP: 33 STORIES, 6 REGIONS", 2, WHITE)
     draw_map(cv, mx + 3, my + 34, mw - 6, mh - 37)
 
     # Numbered index: three columns of micro-headlines.
@@ -469,15 +478,15 @@ def draw_page():
     def index_item(cx, cw, yy, num, head):
         cv.fill_rect(cx, yy, 16, 16, RED)
         cv.text(cx + 3, yy + 4, str(num), 1, WHITE)
-        return cv.wrapped(cx + 22, yy, cw - 22, head, 2, INK) + 2
+        return cv.wrapped(cx + 22, yy, cw - 22, head, 2, INK, lh=20) + 1
 
     def index_header(cx, cw, yy, title):
         cv.text(cx, yy, title, 2, RED)
-        cv.fill_rect(cx, yy + 18, cw, 2, RED)
-        return yy + 28
+        cv.fill_rect(cx, yy + 16, cw, 2, RED)
+        return yy + 24
 
-    # Column 1: North America (stories 1-10).
-    yy = index_header(24, 310, iy, "NORTH AMERICA (10)")
+    # Column 1: North America (stories 1-10, 31).
+    yy = index_header(24, 310, iy, "NORTH AMERICA (11)")
     for num, _reg, head, _lon, _lat in STORIES:
         if _reg == "NA":
             yy = index_item(24, 310, yy, num, head)
@@ -489,11 +498,11 @@ def draw_page():
             yy = index_item(357, 310, yy, num, head)
 
     # Column 3: Middle East & Asia, then Africa, then S. America.
-    yy = index_header(690, 310, iy, "MIDDLE EAST & ASIA (8)")
+    yy = index_header(690, 310, iy, "MIDDLE EAST & ASIA (9)")
     for num, _reg, head, _lon, _lat in STORIES:
         if _reg in ("ME", "AS"):
             yy = index_item(690, 310, yy, num, head)
-    yy = index_header(690, 310, yy + 2, "AFRICA (3)")
+    yy = index_header(690, 310, yy + 2, "AFRICA (4)")
     for num, _reg, head, _lon, _lat in STORIES:
         if _reg == "AF":
             yy = index_item(690, 310, yy, num, head)
